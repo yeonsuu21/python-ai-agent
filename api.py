@@ -21,7 +21,7 @@ def root():
 @app.post("/agent")
 def agent(request: AgentRequest):
     result = run_agent(request.message)
-
+    #내부에 있는 에이전트에 메세지 전송
     return {
         "result": result
     }
