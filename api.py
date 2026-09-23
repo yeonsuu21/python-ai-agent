@@ -1,10 +1,25 @@
 from fastapi import FastAPI
+#cors 에러 방지
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from agent import run_agent
 
 
+
 app = FastAPI()
+
+#cors 에러 방지
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 class AgentRequest(BaseModel):
