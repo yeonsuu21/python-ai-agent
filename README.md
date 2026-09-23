@@ -5,9 +5,10 @@
 단순 Workflow 실행이 아닌,
 **AI Agent가 사용자의 요청을 이해하고 필요한 Tool을 직접 선택·실행**하는 구조를 구현합니다.
 ----
-
+## ai이용한 단순 화면조회
 ![ai-agent자동화 결과](image.png)
 
+## ai이용하여 데이터조회 + 메일 초안 작성
 ![ai 메일초안 작성요청](image-1.png)
 ![alt text](image-2.png)
 ---
