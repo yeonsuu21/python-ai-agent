@@ -46,7 +46,8 @@ AI Agent 기반 자동화
 ### 업무 요청
 ![alt text](image-4.png)
 
-### 업무 요청
+### 일일한도 초과
+![alt text](image-5.png)
 
 ---
 

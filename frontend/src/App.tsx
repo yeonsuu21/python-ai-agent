@@ -35,46 +35,61 @@ function App() {
     setInput("");
     setLoading(true);
 
-    try {
-      const response = await fetch("http://127.0.0.1:8000/agent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message,
-        }),
-      });
+   try {
+  const response = await fetch("http://127.0.0.1:8000/agent", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      message,
+    }),
+  });
 
-      if (!response.ok) {
-        throw new Error("Agent API 요청에 실패했습니다.");
-      }
+  const data = await response.json();
 
-      const data = await response.json();
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: data.result,
-        },
-      ]);
-    } catch (error) {
-      console.error(error);
-
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content:
-            "요청을 처리하는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
-        },
-      ]);
-    } finally {
-      setLoading(false);
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new Error(
+        "Gemini API 일일 요청 한도를 초과했습니다. 😭\n내일 다시 이용해주세요."
+      );
     }
+
+    throw new Error(
+      data.detail || "Agent API 요청에 실패했습니다."
+    );
+  }
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      role: "assistant",
+      content: data.result,
+    },
+  ]);
+} catch (error) {
+  console.error(error);
+
+  const errorMessage =
+    error instanceof Error
+      ? error.message
+      : "요청을 처리하는 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.";
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      role: "assistant",
+      content: errorMessage,
+    },
+  ]);
+} finally {
+  setLoading(false);
+}
+
   };
 
+
+  
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {

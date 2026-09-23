@@ -1,7 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 #cors 에러 방지
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from google.genai._gaos.lib.compat_errors import RateLimitError
 
 from agent import run_agent
 
@@ -35,8 +36,23 @@ def root():
 
 @app.post("/agent")
 def agent(request: AgentRequest):
-    result = run_agent(request.message)
-    #내부에 있는 에이전트에 메세지 전송
-    return {
-        "result": result
-    }
+    try:
+        result = run_agent(request.message)
+
+        return {
+            "result": result
+        }
+
+    except RateLimitError:
+        raise HTTPException(
+            status_code=429,
+            detail="Gemini API 일일 요청 한도를 초과했습니다."
+        )
+
+    except Exception as e:
+        print(f"[Agent Error] {e}")
+
+        raise HTTPException(
+            status_code=500,
+            detail="Agent 요청 처리 중 오류가 발생했습니다."
+        )
