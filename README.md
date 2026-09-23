@@ -38,6 +38,18 @@ AI Agent 기반 자동화
 
 ---
 
+## 🏗️ 실제 화면
+
+### 기본 화면
+![alt text](image-3.png)
+
+### 업무 요청
+![alt text](image-4.png)
+
+### 업무 요청
+
+---
+
 ## 🏗️ Architecture
 
 ```text
